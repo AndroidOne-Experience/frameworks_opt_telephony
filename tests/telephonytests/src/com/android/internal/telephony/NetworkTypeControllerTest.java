@@ -238,6 +238,19 @@ public class NetworkTypeControllerTest extends TelephonyTest {
     }
 
     @Test
+    public void testUpdateOverrideNetworkTypeLte_forceLteCaBypassesBandwidthThreshold()
+            throws Exception {
+        doReturn(true).when(mServiceState).getForceLteCA();
+        doReturn(false).when(mServiceState).isUsingCarrierAggregation();
+        doReturn(new int[] {0}).when(mServiceState).getCellBandwidths();
+
+        updateOverrideNetworkType();
+
+        assertEquals(TelephonyDisplayInfo.OVERRIDE_NETWORK_TYPE_LTE_CA,
+                mNetworkTypeController.getOverrideNetworkType());
+    }
+
+    @Test
     public void testUpdateOverrideNetworkType() throws Exception {
         doReturn(NetworkRegistrationInfo.NR_STATE_CONNECTED).when(mServiceState).getNrState();
         doReturn(ServiceState.FREQUENCY_RANGE_LOW).when(mServiceState).getNrFrequencyRange();
